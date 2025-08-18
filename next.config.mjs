@@ -2,7 +2,7 @@
 const nextConfig = {
   // Performance optimizations
   experimental: {
-    optimizePackageImports: ['@supabase/supabase-js', 'lucide-react'],
+    optimizePackageImports: ['@supabase/supabase-js', 'lucide-react', '@radix-ui/react-avatar', '@radix-ui/react-slot'],
     turbo: {
       rules: {
         '*.svg': {
@@ -30,7 +30,7 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    unoptimized: true, // Added from updates
+    unoptimized: true,
   },
 
   // Security headers
@@ -95,10 +95,10 @@ const nextConfig = {
 
   // ESLint and TypeScript configurations
   eslint: {
-    ignoreDuringBuilds: true, // Added from updates
+    ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true, // Added from updates
+    ignoreBuildErrors: true,
   },
 }
 
