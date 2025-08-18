@@ -1,44 +1,54 @@
 "use server"
 
-import { createServerActionClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 
 // Sign in action
 export async function signIn(prevState: any, formData: FormData) {
+  console.log("[v0] signIn action called")
+
   if (!formData) {
+    console.log("[v0] Form data is missing")
     return { error: "Form data is missing" }
   }
 
   const email = formData.get("email")
   const password = formData.get("password")
 
+  console.log("[v0] Login attempt for email:", email)
+
   if (!email || !password) {
+    console.log("[v0] Email or password missing")
     return { error: "Email and password are required" }
   }
 
-  const cookieStore = cookies()
-  const supabase = createServerActionClient({ cookies: () => cookieStore })
+  const supabase = createClient()
 
   try {
-    const { error } = await supabase.auth.signInWithPassword({
+    console.log("[v0] Attempting Supabase signInWithPassword")
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email.toString(),
       password: password.toString(),
     })
 
     if (error) {
+      console.log("[v0] Supabase auth error:", error.message)
       return { error: error.message }
     }
 
-    return { success: true }
+    console.log("[v0] Login successful, user:", data.user?.email)
+
+    redirect("/dashboard")
   } catch (error) {
-    console.error("Login error:", error)
+    console.error("[v0] Login error:", error)
     return { error: "An unexpected error occurred. Please try again." }
   }
 }
 
 // Sign up action
 export async function signUp(prevState: any, formData: FormData) {
+  console.log("[v0] signUp action called")
+
   if (!formData) {
     return { error: "Form data is missing" }
   }
@@ -52,8 +62,7 @@ export async function signUp(prevState: any, formData: FormData) {
     return { error: "All fields are required" }
   }
 
-  const cookieStore = cookies()
-  const supabase = createServerActionClient({ cookies: () => cookieStore })
+  const supabase = createClient()
 
   try {
     const { data, error } = await supabase.auth.signUp({
@@ -97,9 +106,7 @@ export async function signUp(prevState: any, formData: FormData) {
 
 // Sign out action
 export async function signOut() {
-  const cookieStore = cookies()
-  const supabase = createServerActionClient({ cookies: () => cookieStore })
-
+  const supabase = createClient()
   await supabase.auth.signOut()
   redirect("/auth/login")
 }

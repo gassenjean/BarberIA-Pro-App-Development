@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Scissors } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 import { signIn } from "@/lib/actions"
 
 function SubmitButton() {
@@ -33,15 +31,7 @@ function SubmitButton() {
 }
 
 export default function LoginForm() {
-  const router = useRouter()
   const [state, formAction] = useActionState(signIn, null)
-
-  // Handle successful login by redirecting
-  useEffect(() => {
-    if (state?.success) {
-      router.push("/dashboard")
-    }
-  }, [state, router])
 
   return (
     <Card className="w-full max-w-md glass border-white/10">
