@@ -33,15 +33,21 @@ export async function signIn(prevState: any, formData: FormData) {
 
     if (error) {
       console.log("[v0] Supabase auth error:", error.message)
+      if (error.message.includes("Invalid login credentials")) {
+        return { error: "Email ou senha incorretos. Verifique suas credenciais." }
+      }
+      if (error.message.includes("Email not confirmed")) {
+        return { error: "Por favor, confirme seu email antes de fazer login." }
+      }
       return { error: error.message }
     }
 
     console.log("[v0] Login successful, user:", data.user?.email)
 
-    redirect("/dashboard")
+    return { success: true, user: data.user }
   } catch (error) {
     console.error("[v0] Login error:", error)
-    return { error: "An unexpected error occurred. Please try again." }
+    return { error: "Erro inesperado. Tente novamente em alguns instantes." }
   }
 }
 

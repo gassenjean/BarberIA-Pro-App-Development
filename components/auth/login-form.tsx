@@ -1,7 +1,8 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
 import { useFormStatus } from "react-dom"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,6 +33,14 @@ function SubmitButton() {
 
 export default function LoginForm() {
   const [state, formAction] = useActionState(signIn, null)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (state?.success) {
+      console.log("[v0] Login successful, redirecting to dashboard")
+      router.push("/dashboard")
+    }
+  }, [state?.success, router])
 
   return (
     <Card className="w-full max-w-md glass border-white/10">
@@ -51,6 +60,12 @@ export default function LoginForm() {
           {state?.error && (
             <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg">
               {state.error}
+            </div>
+          )}
+
+          {state?.success && (
+            <div className="bg-green-500/10 border border-green-500/50 text-green-400 px-4 py-3 rounded-lg">
+              Login realizado com sucesso! Redirecionando...
             </div>
           )}
 
