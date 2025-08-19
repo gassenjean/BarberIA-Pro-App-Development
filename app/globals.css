@@ -53,12 +53,13 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    /* Adding direct gradient classes that work in production */
+    @apply bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
+    min-height: 100vh;
   }
 }
 
-/* Enhanced glassmorphism effects with !important for production */
 @layer components {
   .glass {
     @apply bg-white/5 backdrop-blur-2xl border border-white/10;
