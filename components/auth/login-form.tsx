@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect } from "react"
 import { useFormStatus } from "react-dom"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,16 +33,26 @@ function SubmitButton() {
 
 export default function LoginForm() {
   const [state, formAction] = useActionState(signIn, null)
+  const router = useRouter()
 
   useEffect(() => {
     console.log("[v0] LoginForm useEffect triggered, state:", state)
     if (state?.success) {
       console.log("[v0] Login successful, redirecting to dashboard immediately")
-      window.location.replace("/dashboard") // Using window.location.replace for immediate redirect without setTimeout
+      try {
+        router.push("/dashboard")
+        // Fallback after 1 second if router.push doesn't work
+        setTimeout(() => {
+          window.location.href = "/dashboard"
+        }, 1000)
+      } catch (error) {
+        console.log("[v0] Router failed, using window.location")
+        window.location.href = "/dashboard"
+      }
     } else if (state?.error) {
       console.log("[v0] Login error:", state.error)
     }
-  }, [state])
+  }, [state, router])
 
   console.log("[v0] LoginForm render, current state:", state)
 
