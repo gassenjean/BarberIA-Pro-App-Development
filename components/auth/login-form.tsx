@@ -36,11 +36,36 @@ export default function LoginForm() {
   const router = useRouter()
 
   useEffect(() => {
+    console.log("[v0] LoginForm useEffect triggered, state:", state)
     if (state?.success) {
-      console.log("[v0] Login successful, redirecting to dashboard")
-      router.push("/dashboard")
+      console.log("[v0] Login successful, attempting redirect to dashboard")
+
+      const redirectToDashboard = () => {
+        try {
+          console.log("[v0] Trying router.push")
+          router.push("/dashboard")
+
+          // Fallback usando window.location após 1 segundo se router.push não funcionar
+          setTimeout(() => {
+            console.log("[v0] Fallback redirect using window.location")
+            if (window.location.pathname === "/auth/login") {
+              window.location.href = "/dashboard"
+            }
+          }, 1000)
+        } catch (error) {
+          console.error("[v0] Router.push failed, using window.location:", error)
+          window.location.href = "/dashboard"
+        }
+      }
+
+      // Executar redirecionamento imediatamente e com delay
+      redirectToDashboard()
+    } else if (state?.error) {
+      console.log("[v0] Login error:", state.error)
     }
-  }, [state?.success, router])
+  }, [state, router])
+
+  console.log("[v0] LoginForm render, current state:", state)
 
   return (
     <Card className="w-full max-w-md glass border-white/10">
