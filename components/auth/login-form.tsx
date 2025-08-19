@@ -37,9 +37,7 @@ export default function LoginForm() {
     console.log("[v0] LoginForm useEffect triggered, state:", state)
     if (state?.success) {
       console.log("[v0] Login successful, redirecting to dashboard immediately")
-      setTimeout(() => {
-        window.location.href = "/dashboard"
-      }, 500) // Pequeno delay para mostrar mensagem de sucesso
+      window.location.replace("/dashboard") // Using window.location.replace for immediate redirect without setTimeout
     } else if (state?.error) {
       console.log("[v0] Login error:", state.error)
     }
