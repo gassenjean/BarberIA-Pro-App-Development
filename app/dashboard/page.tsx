@@ -1,5 +1,4 @@
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
 import DashboardHeader from "@/components/dashboard/dashboard-header"
 import KPICards from "@/components/dashboard/kpi-cards"
 import AgendaCalendar from "@/components/dashboard/agenda-calendar"
@@ -23,11 +22,27 @@ export default async function DashboardPage() {
   const supabase = createClient()
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser()
 
-  // If no user, redirect to login
+  console.log("[v0] Dashboard - User check:", { user: user?.id, error })
+
+  // If no user, show login prompt instead of redirect to avoid loop
   if (!user) {
-    redirect("/auth/login")
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center space-y-4">
+          <h1 className="text-2xl font-bold text-white">Acesso Restrito</h1>
+          <p className="text-gray-300">Você precisa estar logado para acessar o dashboard.</p>
+          <a
+            href="/auth/login"
+            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Fazer Login
+          </a>
+        </div>
+      </div>
+    )
   }
 
   // Get user profile
