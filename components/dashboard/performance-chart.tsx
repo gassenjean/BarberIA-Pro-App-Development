@@ -22,11 +22,18 @@ export default function PerformanceChart({ barbershopId }: PerformanceChartProps
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
+      const revenueData = payload.find((item: any) => item.dataKey === "revenue")
+      const appointmentsData = payload.find((item: any) => item.dataKey === "appointments")
+
       return (
         <div className="bg-slate-800 border border-white/20 rounded-lg p-3 shadow-lg">
           <p className="text-white font-medium">{`${label}`}</p>
-          <p className="text-green-400">{`Receita: R$ ${payload[0].value.toFixed(2)}`}</p>
-          <p className="text-blue-400">{`Agendamentos: ${payload[1].value}`}</p>
+          {revenueData && revenueData.value !== undefined && (
+            <p className="text-green-400">{`Receita: R$ ${revenueData.value.toFixed(2)}`}</p>
+          )}
+          {appointmentsData && appointmentsData.value !== undefined && (
+            <p className="text-blue-400">{`Agendamentos: ${appointmentsData.value}`}</p>
+          )}
         </div>
       )
     }

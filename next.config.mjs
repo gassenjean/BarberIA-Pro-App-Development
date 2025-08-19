@@ -1,16 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Performance optimizations
   experimental: {
     optimizePackageImports: ['@supabase/supabase-js', 'lucide-react', '@radix-ui/react-avatar', '@radix-ui/react-slot'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
+  },
+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  typescript: {
+    ignoreBuildErrors: true,
   },
 
   // Image optimization
@@ -92,14 +91,6 @@ const nextConfig = {
       return config
     },
   }),
-
-  // ESLint and TypeScript configurations
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
 }
 
 export default nextConfig

@@ -2,7 +2,6 @@
 
 import { useActionState, useEffect } from "react"
 import { useFormStatus } from "react-dom"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -33,37 +32,18 @@ function SubmitButton() {
 
 export default function LoginForm() {
   const [state, formAction] = useActionState(signIn, null)
-  const router = useRouter()
 
   useEffect(() => {
     console.log("[v0] LoginForm useEffect triggered, state:", state)
     if (state?.success) {
-      console.log("[v0] Login successful, attempting redirect to dashboard")
-
-      const redirectToDashboard = () => {
-        try {
-          console.log("[v0] Trying router.push")
-          router.push("/dashboard")
-
-          // Fallback usando window.location após 1 segundo se router.push não funcionar
-          setTimeout(() => {
-            console.log("[v0] Fallback redirect using window.location")
-            if (window.location.pathname === "/auth/login") {
-              window.location.href = "/dashboard"
-            }
-          }, 1000)
-        } catch (error) {
-          console.error("[v0] Router.push failed, using window.location:", error)
-          window.location.href = "/dashboard"
-        }
-      }
-
-      // Executar redirecionamento imediatamente e com delay
-      redirectToDashboard()
+      console.log("[v0] Login successful, redirecting to dashboard immediately")
+      setTimeout(() => {
+        window.location.href = "/dashboard"
+      }, 500) // Pequeno delay para mostrar mensagem de sucesso
     } else if (state?.error) {
       console.log("[v0] Login error:", state.error)
     }
-  }, [state, router])
+  }, [state])
 
   console.log("[v0] LoginForm render, current state:", state)
 
